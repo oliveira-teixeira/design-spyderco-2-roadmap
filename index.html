@@ -1,0 +1,403 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><title>Spyderco 2.0 Roadmap</title></head><body>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400&family=Nunito:wght@400&family=Geist+Mono:wght@400&display=swap">
+<style>
+/* Layout: a center spine of sprint dates with design cards alternating sides; stacks on phones */
+:root {
+  --page: #F6F5F1;
+  --card: #FFFEFA;
+  --sand: #E5E4DF;
+  --sand-strong: #CFCDC5;
+  --ink: #1E2325;
+  --ink-deep: #1F444B;
+  --muted: #505455;
+  --mvp: #69E5FB;
+  --p2: #04FFA8;
+  --p3: #2A5B64;
+  --on-accent: #050B0D;
+  --spider: #1F444B;
+  --white: #FFFFFF;
+  --dot-ring: rgba(31, 68, 75, .32);
+  --on-p3: #FFFEFA;
+  --hatch: rgba(80, 84, 85, .42);
+  --shadow: 0 1px 0 var(--sand), 0 10px 20px -12px rgba(31, 68, 75, .35);
+  --shadow-pop: 0 14px 30px -12px rgba(5, 11, 13, .38);
+  --ease-out: cubic-bezier(.16, 1, .3, 1);
+  --font-display: "Fredoka", "Nunito", system-ui, sans-serif;
+  --font-body: "Nunito", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --fs-xs: 12px;
+  --fs-sm: 14px;
+  --fs-md: 16px;
+  --fs-lg: 28px;
+  --fs-xl: clamp(36px, 6vw, 56px);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --page: #050B0D; --card: #121A1C; --sand: #263033; --sand-strong: #3A4649;
+    --ink: #F6F5F1; --ink-deep: #E1F9FE; --muted: #A9B3B4;
+    --mvp: #69E5FB; --p2: #04FFA8; --p3: #96ECFC;
+    --on-accent: #050B0D; --spider: #54B7C8; --white: #FFFFFF;
+    --dot-ring: rgba(255, 255, 255, .2);
+    --on-p3: #050B0D; --hatch: rgba(169, 179, 180, .42);
+    --shadow: 0 1px 0 #000000, 0 10px 22px -12px rgba(0, 0, 0, .75);
+    --shadow-pop: 0 14px 30px -12px rgba(0, 0, 0, .8);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --page: #050B0D; --card: #121A1C; --sand: #263033; --sand-strong: #3A4649;
+  --ink: #F6F5F1; --ink-deep: #E1F9FE; --muted: #A9B3B4;
+  --mvp: #69E5FB; --p2: #04FFA8; --p3: #96ECFC;
+  --on-accent: #050B0D; --spider: #54B7C8; --white: #FFFFFF;
+  --dot-ring: rgba(255, 255, 255, .2);
+  --on-p3: #050B0D; --hatch: rgba(169, 179, 180, .42);
+  --shadow: 0 1px 0 #000000, 0 10px 22px -12px rgba(0, 0, 0, .75);
+  --shadow-pop: 0 14px 30px -12px rgba(0, 0, 0, .8);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { scrollbar-color: var(--sand-strong) var(--page); }
+body { background: var(--page); color: var(--ink); font-family: var(--font-body); font-size: var(--fs-md); font-weight: 400; line-height: 1.45; -webkit-font-smoothing: antialiased; }
+::selection { background: var(--mvp); color: var(--on-accent); }
+:focus-visible { outline: 2px solid var(--p3); outline-offset: 3px; }
+h1, b { font-weight: 400; }
+.wrap { max-width: 980px; margin: 0 auto; padding-inline: 20px; padding-block: 40px 56px; display: grid; gap: 36px; }
+
+/* Header */
+.top { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 24px; align-items: center; }
+.top h1 { margin: 0 0 8px; font-family: var(--font-display); font-size: var(--fs-xl); line-height: 1.05; color: var(--ink-deep); text-wrap: balance; }
+.top p { margin: 0; color: var(--muted); }
+.mascot { display: flex; align-items: center; gap: 4px; }
+.spider { width: 110px; height: auto; overflow: visible; }
+.spider .sway { transform-origin: 90px 0; animation: sway 4.5s ease-in-out infinite alternate; }
+.spider .thread { stroke: var(--muted); stroke-width: 2; stroke-dasharray: 3 4; fill: none; }
+.spider .leg { stroke: var(--spider); stroke-width: 5; stroke-linecap: round; fill: none; }
+.spider .body { fill: var(--spider); }
+.spider .eye, .spider .shine { fill: var(--white); }
+.spider .pupil { fill: var(--on-accent); }
+.spider .cheek { fill: var(--mvp); }
+.spider .smile { stroke: var(--white); stroke-width: 2.5; stroke-linecap: round; fill: none; }
+@keyframes sway { from { transform: rotate(-5deg); } to { transform: rotate(5deg); } }
+.bubble { background: var(--mvp); color: var(--on-accent); border-radius: 18px; padding: 10px 16px; box-shadow: var(--shadow); }
+.bubble b { display: block; font-family: var(--font-display); font-size: var(--fs-lg); line-height: 1; font-variant-numeric: tabular-nums; }
+.bubble span { font-size: var(--fs-sm); }
+
+/* Milestones */
+.miles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.mile { background: var(--card); border-radius: 20px; padding: 14px 16px; display: grid; gap: 4px; box-shadow: var(--shadow); }
+.mile-label { display: inline-flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: var(--fs-xs); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.mile b { font-family: var(--font-display); font-size: var(--fs-lg); color: var(--ink-deep); line-height: 1.1; font-variant-numeric: tabular-nums; }
+.mile > span:last-child { font-size: var(--fs-sm); color: var(--muted); }
+
+/* Legend */
+.legend { display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: var(--fs-sm); color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; flex: none; box-shadow: inset 0 0 0 1.5px var(--dot-ring); }
+.d-mvp { background: var(--mvp); }
+.d-p2 { background: var(--p2); }
+.d-p3 { background: var(--p3); }
+
+/* Timeline */
+.tl { position: relative; display: grid; gap: 12px; margin: 0; padding: 0; list-style: none; }
+.tl::before { content: ""; position: absolute; top: 8px; bottom: 8px; left: 50%; border-left: 3px dashed var(--sand-strong); transform: translateX(-50%); }
+.row { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) 132px minmax(0, 1fr); gap: 12px; align-items: center; }
+.date { grid-column: 2; grid-row: 1; justify-self: center; z-index: 1; background: var(--card); border: 1.5px solid var(--sand-strong); border-radius: 999px; padding: 5px 12px; font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--ink); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.cell { position: relative; grid-row: 1; width: 100%; display: flex; gap: 10px; align-items: center; background: var(--card); border: 0; border-radius: 16px; padding: 12px 16px; box-shadow: var(--shadow); font: inherit; color: inherit; text-align: left; cursor: pointer; min-width: 0; transition: transform .25s var(--ease-out), box-shadow .25s var(--ease-out); }
+.row.l .cell { grid-column: 1; flex-direction: row-reverse; text-align: right; }
+.row.r .cell { grid-column: 3; }
+.cell:hover, .cell:focus-visible { transform: translateY(-2px); box-shadow: var(--shadow-pop); }
+.cell:hover, .cell:focus { z-index: 50; }
+.txt { display: grid; gap: 3px; min-width: 0; }
+.fb { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--muted); font-variant-numeric: tabular-nums; }
+.row.l .txt .fb { justify-self: end; }
+.cycle { display: flex; align-items: center; gap: 3px; margin-top: 3px; }
+.row.l .txt .cycle { justify-self: end; }
+.cycle i { display: block; flex: none; width: 10px; height: 10px; border-radius: 3px; }
+.cycle .d { background: var(--c); box-shadow: inset 0 0 0 1px var(--dot-ring); }
+.cycle .sep { width: 5px; }
+.cycle .m { border-radius: 50%; background: var(--ink-deep); }
+.cycle .a { background: repeating-linear-gradient(135deg, var(--muted) 0 1.5px, transparent 1.5px 4px); box-shadow: inset 0 0 0 1px var(--muted); }
+.cycle .o { border: 1.5px dashed var(--sand-strong); }
+.cycle .d.mt { background: radial-gradient(circle, var(--ink-deep) 0 2.5px, transparent 3px), var(--c); }
+.cycle .d.at { background: repeating-linear-gradient(135deg, var(--muted) 0 1.5px, transparent 1.5px 4px), var(--c); }
+.c-mvp { --c: var(--mvp); --c-ink: var(--on-accent); }
+.c-p2 { --c: var(--p2); --c-ink: var(--on-accent); }
+.c-p3 { --c: var(--p3); --c-ink: var(--on-p3); }
+.legend .cycle, .agenda .cycle { margin-top: 0; }
+.badge { font-family: var(--font-mono); font-size: var(--fs-xs); letter-spacing: .08em; text-transform: uppercase; background: var(--ink-deep); color: var(--card); border-radius: 999px; padding: 2px 8px; }
+.row.now .cell { box-shadow: 0 0 0 2px var(--p3), var(--shadow); }
+.row.now .date { border-color: var(--p3); }
+
+.tip { position: absolute; top: calc(100% + 10px); left: 0; right: 0; z-index: 50; display: grid; gap: 2px; background: var(--ink-deep); color: var(--card); border-radius: 14px; padding: 10px 14px; font-size: var(--fs-sm); line-height: 1.45; text-align: left; box-shadow: var(--shadow-pop); opacity: 0; visibility: hidden; transform: translateY(-4px); transition: opacity .2s var(--ease-out), transform .2s var(--ease-out), visibility .2s; }
+.tip::before { content: ""; position: absolute; top: -6px; width: 12px; height: 12px; background: var(--ink-deep); transform: rotate(45deg); border-radius: 2px; }
+.tip::after { content: ""; position: absolute; left: 0; right: 0; top: -12px; height: 12px; }
+.row.l .tip::before { right: 22px; }
+.row.r .tip::before { left: 22px; }
+.cell:hover .tip, .cell:focus .tip { opacity: 1; visibility: visible; transform: translateY(0); }
+.cell.dismissed .tip { opacity: 0; visibility: hidden; }
+.hint { color: var(--muted); }
+
+/* Mini calendar: opens under its card, one tile per day, same marks as the cycle strip */
+.chev { flex: none; width: 16px; height: 16px; margin-left: auto; color: var(--muted); fill: none; stroke: currentColor; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; transition: transform .3s var(--ease-out); }
+.row.l .chev { margin-left: 0; margin-right: auto; }
+.cell[aria-expanded="true"] .chev { transform: rotate(180deg); }
+.cell[aria-expanded="true"] .tip { opacity: 0; visibility: hidden; }
+.cal { grid-row: 2; display: grid; gap: 12px; min-width: 0; background: var(--card); border-radius: 16px; padding: 14px 16px 16px; box-shadow: var(--shadow); animation: cal-in .4s var(--ease-out); }
+.cal[hidden] { display: none; }
+.row.l .cal { grid-column: 1; }
+.row.r .cal { grid-column: 3; }
+.cal-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.cal-month { font-family: var(--font-display); font-size: var(--fs-md); color: var(--ink-deep); }
+.cal-total, .when { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.cal-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
+.wd { text-align: center; font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--muted); }
+.day { position: relative; height: 36px; display: grid; place-items: center; border-radius: 8px; font-family: var(--font-mono); font-size: var(--fs-sm); line-height: 1.1; color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.day .n { text-align: center; }
+.day small { display: block; font-size: var(--fs-xs); line-height: 1; }
+.day.out { color: var(--muted); }
+.day.we { color: var(--muted); background: var(--page); }
+.day.d { background: var(--c); color: var(--c-ink); box-shadow: inset 0 0 0 1px var(--dot-ring); }
+.day.m { background: var(--ink-deep); color: var(--card); border-radius: 999px; }
+.day.d.mt .n { display: grid; place-items: center; min-width: 28px; height: 28px; border-radius: 50%; background: var(--ink-deep); color: var(--card); }
+.day.a { background: repeating-linear-gradient(135deg, var(--hatch) 0 1.5px, transparent 1.5px 5px); box-shadow: inset 0 0 0 1px var(--hatch); }
+.day.d.at { background: repeating-linear-gradient(135deg, var(--hatch) 0 1.5px, transparent 1.5px 5px), var(--c); }
+.day.a .n, .day.d.at .n { background: var(--card); color: var(--ink); border-radius: 6px; padding: 1px 4px; }
+.day.off { color: var(--muted); outline: 1.5px dashed var(--sand-strong); outline-offset: -3px; }
+.day.today { z-index: 1; outline: 2px solid var(--ink); outline-offset: 1px; }
+.cal .fill { animation: paint .45s var(--ease-out) backwards; animation-delay: calc(60ms + var(--i) * 20ms); }
+.agenda { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; font-size: var(--fs-sm); }
+.agenda li { display: grid; grid-template-columns: 16px minmax(0, 1fr) auto; gap: 8px; align-items: center; }
+.agenda .cycle { justify-content: center; }
+.cal-notes { display: grid; gap: 2px; padding-top: 10px; border-top: 1.5px dashed var(--sand); font-size: var(--fs-sm); color: var(--muted); }
+.cal-notes p { margin: 0; }
+@keyframes cal-in { from { opacity: 0; transform: translateY(-6px); } }
+@keyframes paint { from { opacity: 0; transform: scale(.6); } }
+
+.mile-row { position: relative; z-index: 1; justify-self: center; display: inline-flex; align-items: center; gap: 10px; background: var(--ink-deep); color: var(--card); border-radius: 999px; padding: 9px 18px; font-family: var(--font-display); font-size: var(--fs-md); margin-block: 6px; box-shadow: var(--shadow); }
+.mile-row .flag { width: 18px; height: 18px; border-radius: 4px; background: conic-gradient(var(--card) 25%, var(--ink-deep) 0 50%, var(--card) 0 75%, var(--ink-deep) 0) 0 0 / 9px 9px; border: 1.5px solid var(--card); flex: none; }
+.pause { z-index: 1; justify-self: center; font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--muted); background: var(--page); border: 1.5px dashed var(--sand-strong); border-radius: 999px; padding: 4px 12px; }
+
+footer { font-size: var(--fs-sm); color: var(--muted); border-top: 1.5px dashed var(--sand-strong); padding-top: 16px; }
+
+@media (max-width: 720px) {
+  .wrap { padding-inline: 16px; padding-block: 28px 48px; gap: 28px; }
+  .top { grid-template-columns: 1fr; }
+  .miles { grid-template-columns: 1fr; }
+  .tl::before { left: 14px; }
+  .row { grid-template-columns: minmax(0, 1fr); gap: 6px; padding-left: 34px; }
+  .date { grid-column: 1; grid-row: 1; justify-self: start; }
+  .row.l .cell, .row.r .cell { grid-column: 1; grid-row: 2; flex-direction: row; text-align: left; }
+  .row.l .tip::before { right: auto; left: 22px; }
+  .row.l .txt .fb, .row.l .txt .cycle { justify-self: start; }
+  .row.l .chev { margin-left: auto; margin-right: 0; }
+  .row.l .cal, .row.r .cal { grid-column: 1; grid-row: 3; }
+  .mile-row, .pause { justify-self: start; margin-left: 34px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .spider .sway { animation: none; }
+  .cell, .tip, .chev { transition: none; }
+  .cal, .cal .fill { animation: none; }
+  .cell:hover, .cell:focus-visible { transform: none; }
+}
+</style>
+
+<main class="wrap">
+
+  <header class="top">
+    <div>
+      <h1>Spyderco 2.0 roadmap</h1>
+      <p>Fetchly design timeline in two week sprints.</p>
+    </div>
+    <div class="mascot">
+      <svg class="spider" viewBox="0 0 180 200" aria-hidden="true">
+        <g class="sway">
+          <line class="thread" x1="90" y1="0" x2="90" y2="98"></line>
+          <path class="leg" d="M68 112 Q40 90 26 106"></path>
+          <path class="leg" d="M66 120 Q34 110 20 130"></path>
+          <path class="leg" d="M66 130 Q36 140 28 162"></path>
+          <path class="leg" d="M70 138 Q50 160 46 182"></path>
+          <path class="leg" d="M112 112 Q140 90 154 106"></path>
+          <path class="leg" d="M114 120 Q146 110 160 130"></path>
+          <path class="leg" d="M114 130 Q144 140 152 162"></path>
+          <path class="leg" d="M110 138 Q130 160 134 182"></path>
+          <ellipse class="body" cx="90" cy="124" rx="30" ry="28"></ellipse>
+          <circle class="eye" cx="79" cy="118" r="8"></circle>
+          <circle class="eye" cx="101" cy="118" r="8"></circle>
+          <circle class="pupil" cx="80" cy="120" r="4"></circle>
+          <circle class="pupil" cx="102" cy="120" r="4"></circle>
+          <circle class="shine" cx="81.6" cy="118.4" r="1.4"></circle>
+          <circle class="shine" cx="103.6" cy="118.4" r="1.4"></circle>
+          <circle class="cheek" cx="71" cy="132" r="4.5"></circle>
+          <circle class="cheek" cx="109" cy="132" r="4.5"></circle>
+          <path class="smile" d="M84 134 Q90 140 96 134"></path>
+        </g>
+      </svg>
+      <div class="bubble" aria-live="polite"><b id="count">52 days</b><span id="count-label">to Black Friday</span></div>
+    </div>
+  </header>
+
+  <section class="miles" aria-label="Milestones">
+    <div class="mile"><span class="mile-label"><i class="dot d-mvp"></i>MVP design</span><b>Oct 21</b><span>Approved, ready for build</span></div>
+    <div class="mile"><span class="mile-label"><i class="dot d-p2"></i>Phase 2 design</span><b>Dec 23</b><span>Approved, ready for build</span></div>
+    <div class="mile"><span class="mile-label"><i class="dot d-p3"></i>Phase 3 design</span><b>Mar 3</b><span>Approved, ready for build</span></div>
+  </section>
+
+  <div class="legend">
+    <span><i class="dot d-mvp"></i>MVP</span>
+    <span><i class="dot d-p2"></i>Phase 2</span>
+    <span><i class="dot d-p3"></i>Phase 3</span>
+    <span><span class="cycle c-mvp" aria-hidden="true"><i class="d"></i><i class="d"></i></span>Design days</span>
+    <span><span class="cycle c-mvp" aria-hidden="true"><i class="d mt"></i></span>Weekly meeting</span>
+    <span><span class="cycle" aria-hidden="true"><i class="m"></i></span>Review meeting</span>
+    <span><span class="cycle" aria-hidden="true"><i class="a"></i><i class="a"></i></span>Async touch-ups</span>
+    <span class="hint">Hover for details, click for the calendar</span>
+  </div>
+
+  <ol class="tl" aria-label="Design sprints">
+    <li class="row l" data-start="2026-10-05" data-end="2026-10-16"><span class="date">Oct 5 to 16</span><button type="button" class="cell" aria-describedby="t1"><i class="dot d-mvp" aria-hidden="true"></i><span class="txt"><span class="title">Finish MVP pages</span><span class="cycle c-mvp" aria-hidden="true"><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="sep"></i><i class="m"></i><i class="a"></i><i class="a"></i></span><span class="fb">Feedback Oct 19 to 21</span></span><span class="tip" role="tooltip" id="t1"><span>Close Gift Finder, Find a Dealer, Steel Chart, Why the clip.</span><span>Remove Phase 2 parts from support pages, fix the mega menu.</span></span></button></li>
+    <li class="row r" data-start="2026-10-19" data-end="2026-10-30"><span class="date">Oct 19 to 30</span><button type="button" class="cell" aria-describedby="t2"><i class="dot d-p2" aria-hidden="true"></i><span class="txt"><span class="title">Backlog: banners, swatches, video</span><span class="cycle c-p2" aria-hidden="true"><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="sep"></i><i class="m"></i><i class="a"></i><i class="a"></i></span><span class="fb">Feedback Nov 2 to 4</span></span><span class="tip" role="tooltip" id="t2"><span>Banner slider rotating the four lines, random as fallback.</span><span>Swatches for cards and PDP, plus video in the PDP gallery.</span></span></button></li>
+    <li class="row l" data-start="2026-11-02" data-end="2026-11-13"><span class="date">Nov 2 to 13</span><button type="button" class="cell" aria-describedby="t3"><i class="dot d-p2" aria-hidden="true"></i><span class="txt"><span class="title">Warranty and clips flows</span><span class="cycle c-p2" aria-hidden="true"><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="sep"></i><i class="m"></i><i class="a"></i><i class="a"></i></span><span class="fb">Feedback Nov 16 to 18</span></span><span class="tip" role="tooltip" id="t3"><span>Warranty claim with photos, claim number and live tracker.</span><span>Clip self service: pick the model, add a photo, pay online.</span></span></button></li>
+    <li class="row r" data-start="2026-11-16" data-end="2026-11-20" data-fb="0"><span class="date">Nov 16 to 20</span><button type="button" class="cell" aria-describedby="t4"><i class="dot d-mvp" aria-hidden="true"></i><span class="txt"><span class="title">Design QA</span><span class="cycle c-mvp" aria-hidden="true"><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i></span></span><span class="tip" role="tooltip" id="t4"><span>Review every ported page against Figma, desktop and mobile.</span><span>Log fixes before the store freezes for Black Friday.</span></span></button></li>
+
+    <li class="pause">Black Friday · Nov 23</li>
+
+    <li class="row l" data-start="2026-11-30" data-end="2026-12-11"><span class="date">Nov 30 to Dec 11</span><button type="button" class="cell" aria-describedby="t5"><i class="dot d-p2" aria-hidden="true"></i><span class="txt"><span class="title">Order status, ad pages, library</span><span class="cycle c-p2" aria-hidden="true"><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="sep"></i><i class="m"></i><i class="a"></i><i class="a"></i></span><span class="fb">Feedback Dec 14 to 16</span></span><span class="tip" role="tooltip" id="t5"><span>Fulfillment stages on order status, ad landing pages.</span><span>Start the Figma library from theme code, with variables.</span></span></button></li>
+    <li class="row r" data-start="2026-12-14" data-end="2026-12-18"><span class="date">Dec 14 to 18</span><button type="button" class="cell" aria-describedby="t6"><i class="dot d-p2" aria-hidden="true"></i><span class="txt"><span class="title">Design system handoff</span><span class="cycle c-p2" aria-hidden="true"><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="sep"></i><i class="m"></i><i class="a"></i><i class="a"></i></span><span class="fb">Feedback Dec 21 to 23</span></span><span class="tip" role="tooltip" id="t6"><span>Variants, Code Connect and usage docs for every component.</span><span>Spyderco marketing can build a page without us.</span></span></button></li>
+
+    <li class="pause">Holidays · Dec 24 to Jan 1</li>
+
+    <li class="row l" data-start="2027-01-04" data-end="2027-01-15"><span class="date">Jan 4 to 15</span><button type="button" class="cell" aria-describedby="t7"><i class="dot d-p3" aria-hidden="true"></i><span class="txt"><span class="title">Phase 3 prototypes, customer tests</span><span class="cycle c-p3" aria-hidden="true"><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="sep"></i><i class="m"></i><i class="a"></i><i class="a"></i></span><span class="fb">Feedback Jan 18 to 20</span></span><span class="tip" role="tooltip" id="t7"><span>Clickable prototypes: Knife Finder, engraving, loyalty.</span><span>Test with 5 to 8 customers, pick what ships first.</span></span></button></li>
+    <li class="row r" data-start="2027-01-18" data-end="2027-01-29"><span class="date">Jan 18 to 29</span><button type="button" class="cell" aria-describedby="t8"><i class="dot d-p3" aria-hidden="true"></i><span class="txt"><span class="title">Knife Finder, OP Focus</span><span class="cycle c-p3" aria-hidden="true"><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="sep"></i><i class="m"></i><i class="a"></i><i class="a"></i></span><span class="fb">Feedback Feb 1 to 3</span></span><span class="tip" role="tooltip" id="t8"><span>Quiz screens and result cards driven by product specs.</span><span>OP Focus checkout states: eligible, discount, limits.</span></span></button></li>
+    <li class="row l" data-start="2027-02-01" data-end="2027-02-12"><span class="date">Feb 1 to 12</span><button type="button" class="cell" aria-describedby="t9"><i class="dot d-p3" aria-hidden="true"></i><span class="txt"><span class="title">Engraving, loyalty</span><span class="cycle c-p3" aria-hidden="true"><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="sep"></i><i class="m"></i><i class="a"></i><i class="a"></i></span><span class="fb">Feedback Feb 15 to 17</span></span><span class="tip" role="tooltip" id="t9"><span>Engraving: text, font, position, blade preview, price.</span><span>Collector and Premier: enrollment, dashboard, PDP prompt.</span></span></button></li>
+    <li class="row r" data-start="2027-02-15" data-end="2027-02-26"><span class="date">Feb 15 to 26</span><button type="button" class="cell" aria-describedby="t10"><i class="dot d-p3" aria-hidden="true"></i><span class="txt"><span class="title">3D View in Hand, community</span><span class="cycle c-p3" aria-hidden="true"><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="sep"></i><i class="m"></i><i class="a"></i><i class="a"></i></span><span class="fb">Feedback Mar 1 to 3</span></span><span class="tip" role="tooltip" id="t10"><span>3D and AR View in Hand block for hero SKU PDPs.</span><span>Ambassador hub, collaborator stories, dealer locator.</span></span></button></li>
+
+    <li class="mile-row"><i class="flag" aria-hidden="true"></i>Mar 3 · All design approved</li>
+  </ol>
+
+  <footer>Dates after Black Friday are a proposal.</footer>
+
+</main>
+
+<script>
+(function () {
+  var DAY = 864e5;
+  var day = function (iso) { var p = iso.split('-'); return new Date(+p[0], p[1] - 1, +p[2]); };
+  var today = new Date(); today.setHours(0, 0, 0, 0);
+  var left = function (iso) { return Math.round((day(iso) - today) / DAY); };
+
+  var count = document.getElementById('count');
+  var label = document.getElementById('count-label');
+  var toBF = left('2026-11-23');
+  var toDone = left('2027-03-03');
+  if (toBF > 0) { count.textContent = toBF + (toBF === 1 ? ' day' : ' days'); label.textContent = 'to Black Friday'; }
+  else if (toBF > -5) { count.textContent = 'This week'; label.textContent = 'is Black Friday'; }
+  else if (toDone > 0) { count.textContent = toDone + (toDone === 1 ? ' day' : ' days'); label.textContent = 'to all design approved'; }
+  else { count.textContent = 'Done'; label.textContent = 'All design shipped'; }
+
+  var rows = document.querySelectorAll('.row[data-start]');
+  for (var i = 0; i < rows.length; i++) {
+    var r = rows[i];
+    if (today <= day(r.dataset.end)) {
+      var badge = document.createElement('span');
+      badge.className = 'badge';
+      badge.textContent = today >= day(r.dataset.start) ? 'Now' : 'Next';
+      r.classList.add('now');
+      r.querySelector('.cell > span').insertAdjacentElement('afterend', badge);
+      break;
+    }
+  }
+
+  var MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  var MONTH = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  var WD = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  var OFF = [['2026-12-24', '2027-01-01', 'Holidays']];
+  var CHEV = '<svg class="chev" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6l4 4 4-4"></path></svg>';
+  var add = function (d, n) { var x = new Date(d); x.setDate(x.getDate() + n); return x; };
+  var wknd = function (d) { return d.getDay() === 0 || d.getDay() === 6; };
+  var nextWork = function (d) { var x = add(d, 1); while (wknd(x)) x = add(x, 1); return x; };
+  var same = function (a, b) { return a && +a === +b; };
+  var md = function (d) { return MON[d.getMonth()] + ' ' + d.getDate(); };
+  var span = function (a, b) { return md(a) + ' to ' + (a.getMonth() === b.getMonth() ? b.getDate() : md(b)); };
+  var wmd = function (d) { return WD[d.getDay()] + ', ' + md(d); };
+  var offOf = function (d) { for (var k = 0; k < OFF.length; k++) if (d >= day(OFF[k][0]) && d <= day(OFF[k][1])) return OFF[k]; return null; };
+  var key = function (c) { return '<span class="cycle"><i class="' + c + '"></i></span>'; };
+
+  rows.forEach(function (r, n) {
+    var cell = r.querySelector('.cell');
+    r.classList.add('c-' + cell.querySelector('.dot').className.match(/d-(\w+)/)[1]);
+    var start = day(r.dataset.start), end = day(r.dataset.end), fb = r.dataset.fb !== '0';
+    var meet = fb && nextWork(end), a1 = fb && nextWork(meet), a2 = fb && nextWork(a1);
+    var last = fb ? a2 : end;
+    var from = add(start, -((start.getDay() + 6) % 7)), to = add(last, (7 - last.getDay()) % 7);
+    var grid = '<span class="wd">M</span><span class="wd">T</span><span class="wd">W</span><span class="wd">T</span><span class="wd">F</span><span class="wd">S</span><span class="wd">S</span>';
+    var i = 0, designDays = 0, offSeen = null, meets = [], strip = cell.querySelectorAll('.txt .cycle .d');
+    for (var d = from; d <= to; d = add(d, 1)) {
+      var cls = 'out', label = '', o = offOf(d), mt = false, at = false, wd = d.getDay();
+      if (wknd(d)) cls = 'we';
+      else if (o) { cls = 'off'; label = o[2]; offSeen = o; }
+      else if (d >= start && d <= end) {
+        cls = 'd'; label = 'Design'; designDays++;
+        if (wd === 1) { mt = true; meets.push(d); label = 'Design, weekly meeting'; }
+        if (wd === 2 || wd === 3) { at = true; label = 'Design, async touch-ups'; }
+        if (strip[designDays - 1]) strip[designDays - 1].classList.toggle(mt ? 'mt' : 'at', mt || at);
+      }
+      else if (same(meet, d)) { cls = 'm'; label = 'Review meeting'; }
+      else if (same(a1, d) || same(a2, d)) { cls = 'a'; label = 'Async touch-ups'; }
+      var fill = cls === 'd' || cls === 'm' || cls === 'a';
+      var num = d.getDate() === 1 ? '<small>' + MON[d.getMonth()] + '</small>1' : d.getDate();
+      grid += '<span class="day ' + cls + (mt ? ' mt' : '') + (at ? ' at' : '') + (fill ? ' fill' : '') + (same(today, d) ? ' today' : '') + '"' + (fill ? ' style="--i:' + i++ + '"' : '') +
+        ' title="' + wmd(d) + (label ? ' · ' + label : '') + '"><span class="n">' + num + '</span></span>';
+    }
+    var month = from.getMonth() === to.getMonth() ? MONTH[from.getMonth()] + ' ' + from.getFullYear()
+      : from.getFullYear() === to.getFullYear() ? MON[from.getMonth()] + ' to ' + MON[to.getMonth()] + ' ' + to.getFullYear()
+      : MON[from.getMonth()] + ' ' + from.getFullYear() + ' to ' + MON[to.getMonth()] + ' ' + to.getFullYear();
+    var total = designDays + (fb ? 3 : 0), meetCount = meets.length + (fb ? 1 : 0);
+    var mondays = meets.map(function (x, k) { return k && x.getMonth() === meets[k - 1].getMonth() ? x.getDate() : md(x); }).join(' and ');
+    var ag = '<li>' + key('d') + '<span>Design</span><span class="when">' + span(start, end) + '</span></li>' +
+      '<li>' + key('d mt') + '<span>Weekly meeting</span><span class="when">Mon, ' + mondays + '</span></li>' +
+      '<li>' + key('a') + '<span>Async touch-ups</span><span class="when">Tue and Wed, every week</span></li>';
+    if (fb) {
+      ag += '<li>' + key('m') + '<span>Review meeting</span><span class="when">' + wmd(meet) + '</span></li>';
+    } else ag += '<li><span></span><span>No feedback round, QA is the review</span></li>';
+    if (offSeen) ag += '<li>' + key('o') + '<span>' + offSeen[2] + '</span><span class="when">' + span(day(offSeen[0]), day(offSeen[1])) + '</span></li>';
+
+    var cal = document.createElement('div');
+    cal.className = 'cal';
+    cal.id = 'cal' + (n + 1);
+    cal.hidden = true;
+    cal.setAttribute('role', 'region');
+    cal.setAttribute('aria-label', cell.querySelector('.title').textContent + ' calendar');
+    cal.innerHTML = '<div class="cal-head"><span class="cal-month">' + month + '</span><span class="cal-total">' + total + ' days · ' + meetCount + (meetCount === 1 ? ' meeting' : ' meetings') + '</span></div>' +
+      '<div class="cal-grid" aria-hidden="true">' + grid + '</div><ul class="agenda">' + ag + '</ul><div class="cal-notes"></div>';
+    var notes = cal.querySelector('.cal-notes');
+    cell.querySelectorAll('.tip > span').forEach(function (t) { var p = document.createElement('p'); p.textContent = t.textContent; notes.appendChild(p); });
+    r.appendChild(cal);
+
+    cell.insertAdjacentHTML('beforeend', CHEV);
+    cell.setAttribute('aria-expanded', 'false');
+    cell.setAttribute('aria-controls', cal.id);
+    cell.addEventListener('click', function () {
+      var open = cell.getAttribute('aria-expanded') !== 'true';
+      cell.setAttribute('aria-expanded', String(open));
+      cal.hidden = !open;
+      cell.classList.add('dismissed');
+    });
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Escape') return;
+    var open = document.querySelectorAll('.cell:hover, .cell:focus');
+    for (var j = 0; j < open.length; j++) open[j].classList.add('dismissed');
+  });
+  document.querySelectorAll('.cell').forEach(function (c) {
+    var reset = function () { c.classList.remove('dismissed'); };
+    c.addEventListener('mouseleave', reset);
+    c.addEventListener('blur', reset);
+  });
+})();
+</script>
+
+</body></html>
